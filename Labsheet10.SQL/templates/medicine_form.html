@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Medicine{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+  <p class="eyebrow">INVENTORY RECORD</p>
+  <h1>Add a medicine</h1>
+  <p>Enter the medicine details. Supplier details are optional.</p>
+</section>
+
+<form class="form-card" method="post">
+  <div class="field-row">
+    <label>
+      Medicine ID
+      <input type="number" name="medicine_id" required min="1"
+             value="{{ request.form.get('medicine_id', '') }}"
+             placeholder="e.g. 301">
+    </label>
+    <label>
+      Medicine Name
+      <input name="name" required maxlength="100"
+             value="{{ request.form.get('name', '') }}"
+             placeholder="e.g. Paracetamol">
+    </label>
+  </div>
+
+  <div class="field-row">
+    <label>
+      Category
+      <input name="category" required maxlength="80"
+             value="{{ request.form.get('category', '') }}"
+             placeholder="e.g. Analgesic">
+    </label>
+    <label>
+      Manufacturer
+      <input name="manufacturer" required maxlength="100"
+             value="{{ request.form.get('manufacturer', '') }}"
+             placeholder="e.g. ABC Pharma">
+    </label>
+  </div>
+
+  <div class="field-row">
+    <label>
+      Price
+      <input type="number" name="price" required min="0" step="0.01"
+             value="{{ request.form.get('price', '') }}">
+    </label>
+    <label>
+      Stock
+      <input type="number" name="stock" required min="0"
+             value="{{ request.form.get('stock', '') }}">
+    </label>
+  </div>
+
+  <div class="supplier-box">
+    <h2>Supplier details <span>(optional)</span></h2>
+    <div class="field-row">
+      <label>
+        Supplier Name
+        <input name="supplier_name" value="{{ request.form.get('supplier_name', '') }}">
+      </label>
+      <label>
+        Supplier Phone
+        <input name="supplier_phone" value="{{ request.form.get('supplier_phone', '') }}">
+      </label>
+    </div>
+    <label>
+      Supplier City
+      <input name="supplier_city" value="{{ request.form.get('supplier_city', '') }}">
+    </label>
+  </div>
+
+  <div class="actions">
+    <button class="button" type="submit">Save medicine</button>
+    <a class="button secondary" href="{{ url_for('view_medicines') }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

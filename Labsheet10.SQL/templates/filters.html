@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Medicine Filters{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+  <p class="eyebrow">MONGODB QUERIES</p>
+  <h1>Filter and sort medicines</h1>
+  <p>Choose one of the lab sheet queries.</p>
+</section>
+
+<section class="filter-grid">
+  <form class="filter-card" method="get">
+    <h2>By category</h2>
+    <input type="hidden" name="filter" value="category">
+    <input name="value" value="{{ value if selected == 'category' else '' }}"
+           placeholder="e.g. Analgesic" required>
+    <button class="text-button" type="submit">Apply →</button>
+  </form>
+
+  <a class="filter-card" href="{{ url_for('filter_medicines', filter='price_over_50') }}">
+    <h2>Price above 50</h2><p>price &gt; 50</p>
+  </a>
+
+  <a class="filter-card" href="{{ url_for('filter_medicines', filter='price_under_100') }}">
+    <h2>Price below 100</h2><p>price &lt; 100</p>
+  </a>
+
+  <a class="filter-card" href="{{ url_for('filter_medicines', filter='low_stock') }}">
+    <h2>Low stock</h2><p>stock &lt; 30</p>
+  </a>
+
+  <form class="filter-card" method="get">
+    <h2>By manufacturer</h2>
+    <input type="hidden" name="filter" value="manufacturer">
+    <input name="value" value="{{ value if selected == 'manufacturer' else '' }}"
+           placeholder="e.g. ABC Pharma" required>
+    <button class="text-button" type="submit">Apply →</button>
+  </form>
+
+  <a class="filter-card" href="{{ url_for('filter_medicines', filter='sort_price') }}">
+    <h2>Sort by price</h2><p>Lowest price first</p>
+  </a>
+
+  <a class="filter-card" href="{{ url_for('filter_medicines', filter='sort_stock') }}">
+    <h2>Sort by stock</h2><p>Lowest stock first</p>
+  </a>
+</section>
+
+{% if selected %}
+<section class="results-section">
+  <h2>Results <span class="count-pill">{{ medicines|length }}</span></h2>
+  {% if medicines %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Medicine</th><th>Category</th><th>Price</th><th>Stock</th><th>Manufacturer</th></tr>
+      </thead>
+      <tbody>
+        {% for m in medicines %}
+        <tr>
+          <td>{{ m.medicine_id }}</td><td>{{ m.name }}</td><td>{{ m.category }}</td>
+          <td>{{ "%.2f"|format(m.price) }}</td><td>{{ m.stock }}</td><td>{{ m.manufacturer }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <p class="empty-note">No medicines match this query.</p>
+  {% endif %}
+</section>
+{% endif %}
+{% endblock %}

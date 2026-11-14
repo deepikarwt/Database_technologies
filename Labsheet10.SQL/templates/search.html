@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Medicine{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+  <p class="eyebrow">FIND A RECORD</p>
+  <h1>Search medicines</h1>
+  <p>Search by Medicine ID or medicine name.</p>
+</section>
+
+<form class="search-form" method="post">
+  <label for="search_value">Medicine ID or name</label>
+  <div class="search-row">
+    <input id="search_value" name="search_value" required
+           value="{{ search_value }}" placeholder="e.g. 301 or Paracetamol">
+    <button class="button" type="submit">Search</button>
+  </div>
+</form>
+
+{% if medicines %}
+<section class="results-section">
+  <h2>Matching medicines</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Medicine</th><th>Category</th><th>Price</th>
+          <th>Stock</th><th>Manufacturer</th><th>Supplier</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in medicines %}
+        <tr>
+          <td class="id-cell">{{ m.medicine_id }}</td>
+          <td>{{ m.name }}</td>
+          <td>{{ m.category }}</td>
+          <td>{{ "%.2f"|format(m.price) }}</td>
+          <td>{{ m.stock }}</td>
+          <td>{{ m.manufacturer }}</td>
+          <td>
+            {% if m.supplier %}
+              {{ m.supplier.name }}, {{ m.supplier.city }} ({{ m.supplier.phone }})
+            {% else %}
+              <span class="muted">—</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

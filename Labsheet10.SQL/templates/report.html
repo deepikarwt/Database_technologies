@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventory Report{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+  <p class="eyebrow">HOSPITALDB · SUMMARY</p>
+  <h1>Inventory report</h1>
+  <p>Overview of medicine count, stock, and prices.</p>
+</section>
+
+<section class="report-grid">
+  <div class="report-card">
+    <span class="eyebrow">TOTAL MEDICINES</span>
+    <strong>{{ total_medicines }}</strong>
+  </div>
+  <div class="report-card">
+    <span class="eyebrow">TOTAL STOCK UNITS</span>
+    <strong>{{ total_stock }}</strong>
+  </div>
+  <div class="report-card">
+    <span class="eyebrow">LOW STOCK MEDICINES</span>
+    <strong>{{ low_stock|length }}</strong>
+    <small>Fewer than 30 units</small>
+  </div>
+</section>
+
+<section class="price-highlights">
+  <div class="card">
+    <p class="eyebrow">MOST EXPENSIVE</p>
+    {% if most_expensive %}
+      <h2>{{ most_expensive.name }}</h2>
+      <p>₹{{ "%.2f"|format(most_expensive.price) }} · ID {{ most_expensive.medicine_id }}</p>
+    {% else %}
+      <p>No medicine records available.</p>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <p class="eyebrow">CHEAPEST</p>
+    {% if cheapest %}
+      <h2>{{ cheapest.name }}</h2>
+      <p>₹{{ "%.2f"|format(cheapest.price) }} · ID {{ cheapest.medicine_id }}</p>
+    {% else %}
+      <p>No medicine records available.</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="results-section">
+  <h2>Low stock list</h2>
+  {% if low_stock %}
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>ID</th><th>Medicine</th><th>Stock</th><th>Manufacturer</th></tr></thead>
+      <tbody>
+        {% for m in low_stock %}
+        <tr>
+          <td>{{ m.medicine_id }}</td><td>{{ m.name }}</td><td class="low-stock">{{ m.stock }}</td>
+          <td>{{ m.manufacturer }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <p class="empty-note">No medicines have stock below 30.</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Home · MediStock{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">HOSPITAL INVENTORY</p>
+  <h1>Medicine Management<br>System</h1>
+  <p>Manage medicine records, track stock, and review inventory information.</p>
+  <div class="actions">
+    <a class="button" href="{{ url_for('add_medicine') }}">Add medicine</a>
+    <a class="button secondary" href="{{ url_for('view_medicines') }}">View inventory</a>
+  </div>
+</section>
+
+<section class="summary">
+  <div class="card">
+    <span class="eyebrow">DATABASE CONNECTION</span>
+    <h2 class="{{ 'online' if connected else 'offline' }}">
+      {{ 'Connected' if connected else 'Not connected' }}
+    </h2>
+    <p>{{ 'HospitalDB is ready.' if connected else 'Start MongoDB, then refresh this page.' }}</p>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow">MEDICINES</span>
+    <h2>{{ total }}</h2>
+    <p>medicine records stored</p>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow">LOW STOCK</span>
+    <h2>{{ low_stock_count }}</h2>
+    <p><a href="{{ url_for('filter_medicines', filter='low_stock') }}">View medicines with stock below 30 →</a></p>
+  </div>
+</section>
+
+<section class="quick-links">
+  <a class="card" href="{{ url_for('search_medicine') }}">Search medicine <span>→</span></a>
+  <a class="card" href="{{ url_for('update_stock') }}">Update stock <span>→</span></a>
+  <a class="card" href="{{ url_for('inventory_report') }}">Inventory report <span>→</span></a>
+</section>
+{% endblock %}

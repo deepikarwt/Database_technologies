@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Medicines{% endblock %}
+
+{% block content %}
+<section class="page-heading heading-row">
+  <div>
+    <p class="eyebrow">HOSPITALDB · MEDICINES</p>
+    <h1>Medicine inventory</h1>
+    <p>{{ medicines|length }} record{{ '' if medicines|length == 1 else 's' }} shown</p>
+  </div>
+  <a class="button" href="{{ url_for('add_medicine') }}">+ Add medicine</a>
+</section>
+
+<div class="sort-links">
+  Sort by:
+  <a href="{{ url_for('view_medicines', sort='medicine_id') }}">Medicine ID</a>
+  <a href="{{ url_for('view_medicines', sort='price') }}">Price</a>
+  <a href="{{ url_for('view_medicines', sort='stock') }}">Stock</a>
+</div>
+
+{% if medicines %}
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Medicine</th><th>Category</th><th>Price</th>
+        <th>Stock</th><th>Manufacturer</th><th>Supplier</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for m in medicines %}
+      <tr>
+        <td class="id-cell">{{ m.medicine_id }}</td>
+        <td>{{ m.name }}</td>
+        <td>{{ m.category }}</td>
+        <td>{{ "%.2f"|format(m.price) }}</td>
+        <td><span class="{{ 'low-stock' if m.stock < 30 else '' }}">{{ m.stock }}</span></td>
+        <td>{{ m.manufacturer }}</td>
+        <td>
+          {% if m.supplier %}
+            {{ m.supplier.name }}<br>
+            <small>{{ m.supplier.city }} · {{ m.supplier.phone }}</small>
+          {% else %}
+            <span class="muted">—</span>
+          {% endif %}
+        </td>
+        <td>
+          <form method="post" action="{{ url_for('delete_medicine', medicine_id=m.medicine_id) }}"
+                onsubmit="return confirm('Delete {{ m.name }}?')">
+            <button class="text-button danger-text" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty card">
+  <h2>No medicines yet</h2>
+  <p>Add a medicine to begin managing the inventory.</p>
+  <a class="button" href="{{ url_for('add_medicine') }}">Add a medicine</a>
+</div>
+{% endif %}
+{% endblock %}
