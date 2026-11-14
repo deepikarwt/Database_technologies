@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ 'Add' if mode == 'add' else 'Update' }} Student{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+  <p class="eyebrow">STUDENT RECORD</p>
+  <h1>{{ 'Add a student' if mode == 'add' else 'Update student' }}</h1>
+  <p>{{ 'Enter the student details below.' if mode == 'add' else 'Edit the fields you want to change.' }}</p>
+</section>
+
+<form class="form-card" method="post">
+  {% if mode == 'add' %}
+    <label>
+      Student ID
+      <input name="student_id" required maxlength="40"
+             value="{{ request.form.get('student_id', '') }}"
+             placeholder="e.g. MCA001">
+    </label>
+  {% else %}
+    <div class="readonly">
+      <span>Student ID</span>
+      <strong>{{ student.student_id }}</strong>
+    </div>
+  {% endif %}
+
+  <label>
+    Student Name
+    <input name="name" required maxlength="100"
+           value="{{ request.form.get('name', student.name if student else '') }}">
+  </label>
+
+  <div class="field-row">
+    <label>
+      Age
+      <input type="number" name="age" required min="1"
+             value="{{ request.form.get('age', student.age if student else '') }}">
+    </label>
+    <label>
+      Gender
+      <input name="gender" required maxlength="30"
+             value="{{ request.form.get('gender', student.gender if student else '') }}"
+             placeholder="e.g. Female">
+    </label>
+  </div>
+
+  <label>
+    Department
+    <input name="department" required maxlength="80"
+           value="{{ request.form.get('department', student.department if student else '') }}"
+           placeholder="e.g. Computer Applications">
+  </label>
+
+  <label>
+    Marks (0–100)
+    <input type="number" name="marks" required min="0" max="100" step="0.01"
+           value="{{ request.form.get('marks', student.marks if student else '') }}">
+  </label>
+
+  <div class="actions">
+    <button class="button" type="submit">
+      {{ 'Save student' if mode == 'add' else 'Save changes' }}
+    </button>
+    <a class="button secondary" href="{{ url_for('view_students') }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Home · Student Records{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">MCA105P · DATABASE TECHNOLOGIES</p>
+  <h1>Student Record<br>Management System</h1>
+  <p>Add, find, update, and manage student records stored in MongoDB.</p>
+  <div class="actions">
+    <a class="button" href="{{ url_for('add_student') }}">Add a student</a>
+    <a class="button secondary" href="{{ url_for('view_students') }}">View all students</a>
+  </div>
+</section>
+
+<section class="summary">
+  <div class="card">
+    <span class="eyebrow">DATABASE CONNECTION</span>
+    <h2 class="{{ 'online' if connected else 'offline' }}">
+      {{ 'Connected' if connected else 'Not connected' }}
+    </h2>
+    <p>{{ 'CollegeDB is ready.' if connected else 'Start MongoDB, then refresh this page.' }}</p>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow">STUDENT RECORDS</span>
+    <h2>{{ count }}</h2>
+    <p>records currently stored</p>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow">QUICK ACTIONS</span>
+    <p><a href="{{ url_for('search_student') }}">Search by Student ID →</a></p>
+    <p><a href="{{ url_for('filter_students') }}">Browse MongoDB filters →</a></p>
+  </div>
+</section>
+{% endblock %}

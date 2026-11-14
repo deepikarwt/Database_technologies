@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Student{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+  <p class="eyebrow">FIND A RECORD</p>
+  <h1>Search students</h1>
+  <p>Enter an exact Student ID to find a record.</p>
+</section>
+
+<form class="search-form" method="post">
+  <label for="student_id">Student ID</label>
+  <div class="search-row">
+    <input id="student_id" name="student_id" value="{{ searched_id }}"
+           required placeholder="e.g. MCA001">
+    <button class="button" type="submit">Search</button>
+  </div>
+</form>
+
+{% if student %}
+  <section class="card result-card">
+    <p class="eyebrow">MATCHING STUDENT</p>
+    <h2>{{ student.name }}</h2>
+    <dl class="details">
+      <dt>Student ID</dt><dd>{{ student.student_id }}</dd>
+      <dt>Age</dt><dd>{{ student.age }}</dd>
+      <dt>Gender</dt><dd>{{ student.gender }}</dd>
+      <dt>Department</dt><dd>{{ student.department }}</dd>
+      <dt>Marks</dt><dd>{{ student.marks }}</dd>
+    </dl>
+    <a href="{{ url_for('update_student', student_id=student.student_id) }}">Edit this record →</a>
+  </section>
+{% endif %}
+{% endblock %}

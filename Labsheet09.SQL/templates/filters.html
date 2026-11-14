@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}MongoDB Filters{% endblock %}
+
+{% block content %}
+<section class="page-heading">
+  <p class="eyebrow">PART D · MONGODB FILTERING</p>
+  <h1>Filter students</h1>
+  <p>Choose a query to see matching student documents.</p>
+</section>
+
+<section class="filter-grid">
+  <a class="filter-card {{ 'active' if selected == 'above75' else '' }}"
+     href="{{ url_for('filter_students', filter='above75') }}">
+    <span>01</span>
+    <h2>Marks above 75</h2>
+    <p>marks &gt; 75</p>
+  </a>
+
+  <a class="filter-card {{ 'active' if selected == 'range' else '' }}"
+     href="{{ url_for('filter_students', filter='range') }}">
+    <span>02</span>
+    <h2>Marks from 50 to 80</h2>
+    <p>50 ≤ marks ≤ 80</p>
+  </a>
+
+  <a class="filter-card {{ 'active' if selected == 'age' else '' }}"
+     href="{{ url_for('filter_students', filter='age') }}">
+    <span>03</span>
+    <h2>Older than 20</h2>
+    <p>age &gt; 20</p>
+  </a>
+
+  <form class="filter-card dept-filter" action="{{ url_for('filter_students') }}">
+    <span>04</span>
+    <h2>By department</h2>
+    <input type="hidden" name="filter" value="department">
+    <label class="sr-only" for="department">Department name</label>
+    <input id="department" name="department" value="{{ department }}"
+           required placeholder="e.g. MCA">
+    <button class="text-button" type="submit">Apply filter →</button>
+  </form>
+</section>
+
+{% if selected %}
+  <section class="results-section">
+    <h2>Matching records <span class="count-pill">{{ students|length }}</span></h2>
+    {% if students %}
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Student ID</th><th>Name</th><th>Age</th>
+              <th>Gender</th><th>Department</th><th>Marks</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in students %}
+              <tr>
+                <td class="id-cell">{{ s.student_id }}</td>
+                <td>{{ s.name }}</td>
+                <td>{{ s.age }}</td>
+                <td>{{ s.gender }}</td>
+                <td>{{ s.department }}</td>
+                <td>{{ s.marks }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="empty-note">No students match this filter yet.</p>
+    {% endif %}
+  </section>
+{% endif %}
+{% endblock %}
